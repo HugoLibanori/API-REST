@@ -44,7 +44,7 @@ class TokenControler {
             const token = jsonwebtoken_1.default.sign({ id, email }, tokenSecret, {
                 expiresIn: Number(tokenExpiration),
             });
-            return res.json({ token });
+            return res.json({ token, user: { nome: user.nome, id, email } });
         });
     }
 }
