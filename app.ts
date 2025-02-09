@@ -26,12 +26,13 @@ const corsOptions: CorsOptions = {
     origin: string | undefined,
     cb: (_err: Error | null, _allow?: boolean) => void
   ) => {
-    if (whiteList.indexOf(origin || "") !== -1 || !origin) {
+    if (!origin || whiteList.indexOf(origin) !== -1) {
       cb(null, true);
     } else {
       cb(new Error("Not allowed by CORS"));
     }
   },
+  credentials: true,
 };
 
 class App {
