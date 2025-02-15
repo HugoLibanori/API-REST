@@ -2,12 +2,13 @@ import dotenv from "dotenv";
 import { resolve } from "path";
 import cors, { CorsOptions } from "cors";
 import helmet from "helmet";
+import delay from "express-delay";
 
 dotenv.config();
 
 import "./src/database";
-
 import express, { Application } from "express";
+
 import homeRoutes from "./src/routes/homeRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import tokenRoutes from "./src/routes/tokenRoutes";
@@ -48,6 +49,7 @@ class App {
   private middleware() {
     this.app.use(cors(corsOptions));
     this.app.use(helmet());
+    this.app.use(delay(2000));
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(express.json());
     this.app.use(
