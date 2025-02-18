@@ -3,7 +3,7 @@ import Aluno from "../models/Aluno";
 import Foto from "../models/Foto";
 
 class AlunoControler {
-  async index(req: Request, res: Response): Promise<Response> {
+  async index(req: Request, res: Response): Promise<void> {
     const alunos = await Aluno.findAll({
       attributes: [
         "id",
@@ -23,49 +23,53 @@ class AlunoControler {
         attributes: ["url", "filename"],
       },
     });
-    return res.json(alunos);
+    res.json(alunos);
+    return;
   }
 
-  async create(req: Request, res: Response): Promise<Response> {
+  async create(req: Request, res: Response): Promise<void> {
     try {
       const aluno = await Aluno.create(req.body);
-      return res.json(aluno);
+      res.json(aluno);
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
+      return;
     }
   }
 
-  async update(req: Request, res: Response): Promise<Response> {
+  async update(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
       if (!id) {
-        return res.status(400).json({ Errors: ["Id nao informado"] });
+        res.status(400).json({ Errors: ["Id nao informado"] });
+        return;
       }
 
       const aluno = await Aluno.findByPk(id);
 
       if (!aluno) {
-        return res.status(400).json({ Errors: ["Aluno não existe!"] });
+        res.status(400).json({ Errors: ["Aluno não existe!"] });
+        return;
       }
 
       const novoAluno = await aluno.update(req.body);
-      return res.json(novoAluno);
+      res.json(novoAluno);
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
+      return;
     }
   }
 
-  async show(req: Request, res: Response): Promise<Response> {
+  async show(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
       if (!id) {
-        return res.status(400).json({ Errors: ["Id nao informado"] });
+        res.status(400).json({ Errors: ["Id nao informado"] });
+        return;
       }
 
       const aluno = await Aluno.findByPk(id, {
@@ -89,36 +93,39 @@ class AlunoControler {
       });
 
       if (!aluno) {
-        return res.status(400).json({ Errors: ["Aluno não existe!"] });
+        res.status(400).json({ Errors: ["Aluno não existe!"] });
+        return;
       }
-      return res.json(aluno);
+      res.json(aluno);
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
+      return;
     }
   }
 
-  async delete(req: Request, res: Response): Promise<Response> {
+  async delete(req: Request, res: Response): Promise<void> {
     try {
       const { id } = req.params;
 
       if (!id) {
-        return res.status(400).json({ Errors: ["Id nao informado"] });
+        res.status(400).json({ Errors: ["Id nao informado"] });
+        return;
       }
 
       const aluno = await Aluno.findByPk(id);
 
       if (!aluno) {
-        return res.status(400).json({ Errors: ["Aluno não existe!"] });
+        res.status(400).json({ Errors: ["Aluno não existe!"] });
+        return;
       }
 
       await aluno.destroy();
-      return res.json({ message: ["✅ Aluno deletado com sucesso!"] });
+      res.json({ message: ["✅ Aluno deletado com sucesso!"] });
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
+      return;
     }
   }
 }

@@ -6,17 +6,20 @@ export default async (
   req: Request & { userId?: number; userEmail?: string },
   res: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   const tokenSecret = process.env.TOKEN_SECRET;
   if (!tokenSecret) {
-    return res.status(500).json({
+    res.status(500).json({
       Errors: ["Erro no servidor: TOKEN_SECRET não foi definido!"],
     });
+    return;
   }
+
   const { authorization } = req.headers;
 
   if (!authorization) {
-    return res.status(401).json({ Errors: ["Login obrigatório!"] });
+    res.status(401).json({ Errors: ["Login obrigatório!"] });
+    return;
   }
 
   const [, token] = authorization.split(" ");
@@ -28,14 +31,15 @@ export default async (
     const user = await User.findOne({ where: { id, email } });
 
     if (!user) {
-      return res.status(401).json({ Errors: ["Usuário inválido!"] });
+      res.status(401).json({ Errors: ["Usuário inválido!"] });
+      return;
     }
 
     req.userId = id;
     req.userEmail = email;
-    return next();
+    next();
   } catch (e: any) {
     console.error(e);
-    return res.status(401).json({ Errors: ["Token expirado ou inválido!"] });
+    res.status(401).json({ Errors: ["Token expirado ou inválido!"] });
   }
 };
