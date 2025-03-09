@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 
 class HomeControler {
-  async index(req: Request, res: Response): Promise<Response> {
-    return res.json("Index");
+  async index(req: Request, res: Response): Promise<void> {
+    res.json("Index");
+    return;
   }
 }
 

@@ -6,6 +6,6 @@ import loginRequired from "../middlewares/loginRequired";
 
 const router = Router();
 
-router.post("/", loginRequired as any, fotoController.store as any);
+router.post("/", loginRequired, fotoController.store);
 
 export default router;

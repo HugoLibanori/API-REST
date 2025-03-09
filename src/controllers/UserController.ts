@@ -2,64 +2,66 @@ import { Request, Response } from "express";
 import User from "../models/User";
 
 class UserControler {
-  async create(req: Request, res: Response): Promise<Response> {
+  async create(req: Request, res: Response): Promise<void> {
     try {
       const novoLuno = await User.create(req.body);
       const { id, nome, email } = novoLuno;
-      return res.json({ id, nome, email });
+      res.json({ id, nome, email });
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
     }
+    return;
   }
 
-  async index(req: Request, res: Response): Promise<Response> {
+  async index(req: Request, res: Response): Promise<void> {
     try {
       const users = await User.findAll({ attributes: ["id", "nome", "email"] });
 
-      return res.json(users);
+      res.json(users);
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
     }
+    return;
   }
 
-  async update(req: Request, res: Response): Promise<Response> {
+  async update(req: Request, res: Response): Promise<void> {
     try {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({ Errors: ["Usuário não existe!"] });
+        res.status(400).json({ Errors: ["Usuário não existe!"] });
+        return;
       }
 
       const novosDados = await user.update(req.body);
       const { id, nome, email } = novosDados;
-      return res.json({ id, nome, email });
+      res.json({ id, nome, email });
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
+      return;
     }
   }
 
-  async delete(req: Request, res: Response): Promise<Response> {
+  async delete(req: Request, res: Response): Promise<void> {
     try {
       const user = await User.findByPk(req.userId);
 
       if (!user) {
-        return res.status(400).json({ Errors: ["Usuário não existe!"] });
+        res.status(400).json({ Errors: ["Usuário não existe!"] });
+        return;
       }
 
       const { id, nome, email } = user;
 
       await user.destroy();
-      return res.json({ id, nome, email });
+      res.json({ id, nome, email });
+      return;
     } catch (e: any) {
-      return res
-        .status(400)
-        .json({ Errors: e.errors.map((e: any) => e.message) });
+      res.status(400).json({ Errors: e.errors.map((e: any) => e.message) });
+      return;
     }
   }
 }
