@@ -15,7 +15,7 @@ import tokenRoutes from "./src/routes/tokenRoutes";
 import alunoRoutes from "./src/routes/alunoRoutes";
 import fotoRoutes from "./src/routes/fotoRoutes";
 
-const whiteList = [];
+const whiteList: string[] = [];
 
 const corsOptions: CorsOptions = {
   origin: (
